@@ -1,15 +1,22 @@
-var title = "Instruments"
-var synth, synth2;
-var mSynth, fmSynth;
-var plucky;
+var synth;
+var mSynth;
 var polyS;
+var img;
+
+var showImg = false;
+var showText = true;
+
+function preload(){
+	img = loadImage("Mario_Power_Up.jpg");
+}
 
 function setup(){
-	createCanvas(640, 400);
+	createCanvas(920, 640);
+	background(150);
 
 	synth = new Tone.Synth({
 		oscillator:{
-			type:"triangle"
+			type:"square"
 		},
 		envelope:{
 			attack:0.005,
@@ -18,63 +25,50 @@ function setup(){
 			release:1
 		}
 	}).toMaster();
-
-	synth.envelope.attack = 2;
-	synth2 = new Tone.Synth().toMaster();
-
-	synth.triggerAttackRelease('C4', 3);
-	synth2.triggerAttackRelease('G4', '4n', +1, 0.5);
-
-	mSynth = new Tone.MonoSynth({
-	"oscillator" : {
-		"type" : "square"
-	 },
- 		"envelope" : {
- 		"attack" : 0.7
- 	}}).toMaster();
-
-	fmSynth = new Tone.FMSynth().toMaster();
-	fmSynth.modulationIndex.value = 20;
-	fmSynth.harmonicity.value = 5;
-
-	plucky = new Tone.PluckSynth().toMaster();
-
-	polyS = new Tone.PolySynth(6, Tone.Synth).toMaster();
-	polyS.set("detune", -1200);
 }
 
 function draw(){
-	fill(100);
-	rect(0, 0, width, height);
 	fill(255);
 	textSize(20);
-	textAlign(10, 10);
-	text(title, 50, 50);
+	text("Mario Power Up Sound Object", 50, 50);
+	textSize(15);
+	text("Red Mushroom!", 50, 80);
+	
+	fill(90);
+	rect(250, 70, 540, 465, 20);
+	if(showText == true){
+		fill(255);
+		textSize(50);
+		text("Click Me", 420, 300);
+	}
 
-	var mx = mouseX / width;
-	fmSynth.harmonicity.value = mx * 8.0;
-	var my = mouseY / height;
-	plucky.dampening.value = (my * 6000) + 500;
-	plucky.resonance.value = mx;
+	if(showImg == true){
+		image(img, 250, 70, 547, 470);		
+	}
 }
 
-function keyPressed(){
-	console.log("Key is: ", keyCode);
-	//press 1
-	if(keyCode == 49){
-		mSynth.triggerAttackRelease("C4", "8n");
-	}
-	//press 2
-	else if(keyCode == 50){
-		fmSynth.triggerAttackRelease("C5", "4n");
-	}
-	//press 3
-	else if(keyCode == 51){
-		plucky.triggerAttack("C4");
-	}
-	//press 4
-	else if(keyCode == 52){
-		polyS.triggerAttackRelease(["C4", "E4", "A4"], "4n");
-		polyS.triggerAttackRelease(["C4", "F4", "B3"], "4n", "+1");
+function mousePressed(){
+	if((mouseX >= 250) && (mouseX <= 250 + 547)
+	&& (mouseY >= 70) && (mouseY <= 70 + 470)){
+		showImg = true;
+
+		synth.triggerAttackRelease(0.8);
+		synth.triggerAttackRelease("G4", "8t", "+0.1");
+		synth.triggerAttackRelease("B4", "8t", "+0.15");
+		synth.triggerAttackRelease("D5", "8t", "+0.2");
+		synth.triggerAttackRelease("G5", "8t", "+0.25");
+		synth.triggerAttackRelease("B6", "8t", "+0.3");
+		
+		synth.triggerAttackRelease("Ab4", "8t", "+0.35");
+		synth.triggerAttackRelease("C4", "8t", "+0.4");
+		synth.triggerAttackRelease("Eb5", "8t", "+0.45");
+		synth.triggerAttackRelease("Ab5", "8t", "+0.5");
+		synth.triggerAttackRelease("C6", "8t", "+0.55");
+
+		synth.triggerAttackRelease("Bb4", "8t", "+0.6");
+		synth.triggerAttackRelease("D4", "8t", "+0.65");
+		synth.triggerAttackRelease("F5", "8t", "+0.7");
+		synth.triggerAttackRelease("Bb5", "8t", "+0.75");
+		synth.triggerAttackRelease("D6", "8t", "+0.8");
 	}
 }
